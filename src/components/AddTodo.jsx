@@ -1,3 +1,6 @@
+import { useState } from "react";
+import Todos from "./Todos"; // Import Todos component
+
 function AddTodo() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
@@ -20,6 +23,11 @@ function AddTodo() {
             Add Task
           </button>
         </form>
+        
+        {/* Render Todos component here */}
+        <div className="mt-6">
+          <Todos />
+        </div>
       </div>
     </div>
   );
