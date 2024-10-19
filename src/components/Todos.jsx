@@ -1,35 +1,31 @@
-import {useSelector,  useDispatch
-} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FaDeleteLeft } from "react-icons/fa6";
 import {
   removeTodo,
   toggleTodo,
   updateTodo,
 } from "../features/todos/todoSlice";
-import { useState , useEffect } from "react";
-
+import { useState, useEffect } from "react";
 
 function Todos() {
-  const todos = useSelector(state => state.todos);
+  const todos = useSelector((state) => state.todos);
   const dispatch = useDispatch();
   const [editingId, setEditingId] = useState('');
   const [updatedText, setUpdatedText] = useState('');
 
-    useEffect(() => {
+  useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
-    }, [todos]);
-    
+  }, [todos]);
 
   const handleEdit = (todo) => {
     setEditingId(todo.id);
     setUpdatedText(todo.text);
-    console.log(editingId);
-  }
+  };
 
   const handleUpdate = (id) => {
     dispatch(updateTodo({ id, text: updatedText }));
     setEditingId(null);
-    };
+  };
 
   return (
     <>
@@ -63,30 +59,33 @@ function Todos() {
                   Save
                 </button>
               ) : (
-                <button
-                  onClick={() => handleEdit(todo)}
-                  className="p-1 text-white bg-yellow-500 rounded"
-                >
-                  Edit
-                </button>
+                <>
+                  <button
+                    onClick={() => handleEdit(todo)}
+                    className="p-1 text-white bg-yellow-500 rounded"
+                  >
+                    Edit
+                  </button>
+
+                  {/* Hide Delete and Complete buttons when editing */}
+                  <button
+                    onClick={() => dispatch(toggleTodo(todo.id))}
+                    className={`text-white ${
+                      todo.completed ? "bg-green-500" : "bg-yellow-500"
+                    } p-1 rounded`}
+                  >
+                    {todo.completed ? "Undo" : "Complete"}
+                  </button>
+
+                  <button
+                    type="submit"
+                    onClick={() => dispatch(removeTodo(todo.id))}
+                    className="text-red-500"
+                  >
+                    <FaDeleteLeft className="text-white" />
+                  </button>
+                </>
               )}
-
-              <button
-                onClick={() => dispatch(toggleTodo(todo.id))}
-                className={`text-white ${
-                  todo.completed ? "bg-green-500" : "bg-yellow-500"
-                } p-1 rounded`}
-              >
-                {todo.completed ? "Undo" : "Complete"}
-              </button>
-
-              <button
-                type="submit"
-                onClick={() => dispatch(removeTodo(todo.id))}
-                className="text-red-500"
-              >
-                <FaDeleteLeft className="text-white" />
-              </button>
             </div>
           </li>
         ))}
